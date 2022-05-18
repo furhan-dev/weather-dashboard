@@ -47,20 +47,20 @@ function getWeather(city, lon, lat) {
         }
     })
     .then(data => renderWeather(city, data))
-    .catch(error => alert('Unable to connect to Open Weather'));
+    // .catch(error => alert('Unable to connect to Open Weather'));
 }
 
 function renderWeather(city, data) {
-    const uvi = data.current.uvi;
-    const temp = data.current.temp;
-    const wind = data.current.wind_speed;
-    const humidity = data.current.humidity;
-    const icon = data.current.weather[0].icon;
-
-    console.log(city + " " + uvi + " " + temp + " " + wind + " " + humidity + " " + icon);
+    const currentWeatherObj = {
+        "Temp": Math.round(data.current.temp) + "°F",
+        "Wind Speed": Math.round(data.current.wind_speed) + " MPH",
+        "Humidity": Math.round(data.current.humidity) + "%",
+        "UV Index": Math.round(data.current.uvi),
+        "icon": data.current.weather[0].icon
+    };
 
     const containterCardEl = document.createElement("div");
-    let cls = ["container-card", "card"];
+    let cls = ["container-card", "card", "my-3"];
     containterCardEl.classList.add(...cls);
 
     const containerHeaderEl = document.createElement("div");
@@ -75,25 +75,65 @@ function renderWeather(city, data) {
 
     // create current weather card
     const currentWeatherCardEl = document.createElement("div");
-    cls = ["current-weather", "card"];
+    cls = ["current-weather", "card", "col-6", "col-md-4", "col-lg-3"];
     currentWeatherCardEl.classList.add(...cls);
 
-    // create current weather header
+    // create current weather image
+    const currentWeatherCardImgEl = document.createElement("img");
+    cls = ["current-weather-img", "card-img-top"];
+    currentWeatherCardImgEl.classList.add(...cls);
+    currentWeatherCardImgEl.setAttribute("src", "https://openweathermap.org/img/wn/" + currentWeatherObj["icon"] + "@2x.png");
+    currentWeatherCardImgEl.setAttribute("alt", "current weather condition image");
+
+    // create current weather body
+    const currentWeatherCardBodyEl = document.createElement("div");
+    cls = ["current-weather-body", "card-body"];
+    currentWeatherCardBodyEl.classList.add(...cls);
+
+    // create current weather title 
     const currentWeatherCardTitleEl = document.createElement("h5");
     cls = ["current-weather-title", "card-title"];
     currentWeatherCardTitleEl.classList.add(...cls);
     currentWeatherCardTitleEl.textContent = "Current Conditions";
 
-    // create current weather body
-    const currentWeatherCardBodyEl = document.createElement("div");
-    cls = ["current-weather-body", "card-body", "col"];
-    currentWeatherCardBodyEl.classList.add(...cls);
+    // create current weather text
+    const currentWeatherCardTextEl = document.createElement("div");
+    cls = ["current-weather-text", "card-text"];
+    currentWeatherCardTextEl.classList.add(...cls);
+
+    // loop over the currentWeatherObj and add to currentWeatherCardTextEl
+    for (const property in currentWeatherObj) {
+
+        // skip icon property
+        if (property === "icon") {
+            break;
+        }
+
+        const propertyDiv = document.createElement("div");
+        propertyDiv.textContent = `${property}: ${currentWeatherObj[property]}`;
+        propertyDiv.classList.add("px-2")
+
+        // // update UVI background color
+        if (property === "UV Index") {
+            let cls = "";
+            const uvi = currentWeatherObj[property];
+            if (uvi < 3) {
+                cls = "bg-success";
+            } else if (uvi < 6) {
+                cls = "bg-warning";
+            } else {
+                cls = "bg-danger";
+            }
+            propertyDiv.classList.add(cls, "rounded-2");
+        }
+        currentWeatherCardTextEl.append(propertyDiv);
+    }
 
     // append all the things
 
     // append current weather elements
-    currentWeatherCardBodyEl.append(currentWeatherCardTitleEl);
-    currentWeatherCardEl.append(currentWeatherCardBodyEl);
+    currentWeatherCardBodyEl.append(currentWeatherCardTitleEl, currentWeatherCardTextEl);
+    currentWeatherCardEl.append(currentWeatherCardImgEl, currentWeatherCardBodyEl);
 
     // append current weather to container body
     containerBodyEl.append(currentWeatherCardEl);
