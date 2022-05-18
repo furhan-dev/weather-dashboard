@@ -59,11 +59,46 @@ function renderWeather(city, data) {
 
     console.log(city + " " + uvi + " " + temp + " " + wind + " " + humidity + " " + icon);
 
-    const currentWeatherDivEl = document.createElement("div");
-    const cls = ["current-weather", "card"];
-    currentWeatherDivEl.classList.add(...cls);
-    currentWeatherDivEl.textContent = city;
-    document.querySelector(".container").append(currentWeatherDivEl);
+    const containterCardEl = document.createElement("div");
+    let cls = ["container-card", "card"];
+    containterCardEl.classList.add(...cls);
+
+    const containerHeaderEl = document.createElement("div");
+    cls = ["container-header", "card-header", "h2"];
+    containerHeaderEl.classList.add(...cls);
+    containerHeaderEl.textContent = city;
+
+    // create container card body div
+    const containerBodyEl = document.createElement("div");
+    cls = ["container-body", "card-body"];
+    containerBodyEl.classList.add(...cls);
+
+    // create current weather card
+    const currentWeatherCardEl = document.createElement("div");
+    cls = ["current-weather", "card"];
+    currentWeatherCardEl.classList.add(...cls);
+
+    // create current weather header
+    const currentWeatherCardTitleEl = document.createElement("h5");
+    cls = ["current-weather-title", "card-title"];
+    currentWeatherCardTitleEl.classList.add(...cls);
+    currentWeatherCardTitleEl.textContent = "Current Conditions";
+
+    // create current weather body
+    const currentWeatherCardBodyEl = document.createElement("div");
+    cls = ["current-weather-body", "card-body", "col"];
+    currentWeatherCardBodyEl.classList.add(...cls);
+
+    // append all the things
+
+    // append current weather elements
+    currentWeatherCardBodyEl.append(currentWeatherCardTitleEl);
+    currentWeatherCardEl.append(currentWeatherCardBodyEl);
+
+    // append current weather to container body
+    containerBodyEl.append(currentWeatherCardEl);
+    containterCardEl.append(containerHeaderEl, containerBodyEl);
+    document.querySelector(".container").append(containterCardEl);
 
 }
 
