@@ -47,7 +47,7 @@ function getWeather(city, lon, lat) {
         }
     })
     .then(data => renderWeather(city, data))
-    // .catch(error => alert('Unable to connect to Open Weather'));
+    .catch(error => alert('Unable to connect to Open Weather'));
 }
 
 function renderWeather(city, data) {
@@ -55,7 +55,7 @@ function renderWeather(city, data) {
     const temp = data.current.temp;
     const wind = data.current.wind_speed;
     const humidity = data.current.humidity;
-    const icon = data.current.weather.icon;
+    const icon = data.current.weather[0].icon;
 
     console.log(city + " " + uvi + " " + temp + " " + wind + " " + humidity + " " + icon);
 
