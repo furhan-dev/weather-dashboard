@@ -51,14 +51,6 @@ function getWeather(city, lon, lat) {
 }
 
 function renderWeather(city, data) {
-    const currentWeatherObj = {
-        "Temp": Math.round(data.current.temp) + "°F",
-        "Wind Speed": Math.round(data.current.wind_speed) + " MPH",
-        "Humidity": Math.round(data.current.humidity) + "%",
-        "UV Index": Math.round(data.current.uvi),
-        "icon": data.current.weather[0].icon
-    };
-
     const containterCardEl = document.createElement("div");
     let cls = ["container-card", "card", "my-3"];
     containterCardEl.classList.add(...cls);
@@ -70,39 +62,84 @@ function renderWeather(city, data) {
 
     // create container card body div
     const containerBodyEl = document.createElement("div");
-    cls = ["container-body", "card-body"];
+    cls = ["container-body", "card-body", "row"];
     containerBodyEl.classList.add(...cls);
 
-    // create current weather card
-    const currentWeatherCardEl = document.createElement("div");
-    cls = ["current-weather", "card", "col-6", "col-md-4", "col-lg-3"];
-    currentWeatherCardEl.classList.add(...cls);
+    // get current weather data and store in object
+    const currentWeatherObj = {
+        "Temp": Math.round(data.current.temp) + "°F",
+        "Wind Speed": Math.round(data.current.wind_speed) + " MPH",
+        "Humidity": Math.round(data.current.humidity) + "%",
+        "UV Index": Math.round(data.current.uvi),
+        "icon": data.current.weather[0].icon
+    };
 
-    // create current weather image
-    const currentWeatherCardImgEl = document.createElement("img");
-    cls = ["current-weather-img", "card-img-top"];
-    currentWeatherCardImgEl.classList.add(...cls);
-    currentWeatherCardImgEl.setAttribute("src", "https://openweathermap.org/img/wn/" + currentWeatherObj["icon"] + "@2x.png");
-    currentWeatherCardImgEl.setAttribute("alt", "current weather condition image");
+    // append current weather to container body
+    containerBodyEl.append(createDailyWeatherCard(null, currentWeatherObj));
 
-    // create current weather body
-    const currentWeatherCardBodyEl = document.createElement("div");
-    cls = ["current-weather-body", "card-body"];
-    currentWeatherCardBodyEl.classList.add(...cls);
+    const dailyDataArray = data.daily;
+    for (let i = 0; i < 5; i++) {
+        const data = dailyDataArray[i];
+        const weatherDataObj = {
+            "Temp": data.temp.max + "°F",
+            "Wind Speed": Math.round(data.wind_speed) + " MPH",
+            "Humidity": Math.round(data.humidity) + "%",
+            "UV Index": Math.round(data.uvi),
+            "icon": data.weather[0].icon
+        }
 
-    // create current weather title 
-    const currentWeatherCardTitleEl = document.createElement("h5");
-    cls = ["current-weather-title", "card-title"];
-    currentWeatherCardTitleEl.classList.add(...cls);
-    currentWeatherCardTitleEl.textContent = "Current Conditions";
+        // append daily weather to container body
+        containerBodyEl.append(createDailyWeatherCard(moment.unix(data.dt).format("MM/DD/YYYY"), weatherDataObj));
 
-    // create current weather text
-    const currentWeatherCardTextEl = document.createElement("div");
-    cls = ["current-weather-text", "card-text"];
-    currentWeatherCardTextEl.classList.add(...cls);
+    }
 
-    // loop over the currentWeatherObj and add to currentWeatherCardTextEl
-    for (const property in currentWeatherObj) {
+    // append everything to body
+    containterCardEl.append(containerHeaderEl, containerBodyEl);
+    document.querySelector(".container").append(containterCardEl);
+
+}
+
+function createDailyWeatherCard(date, weatherDataObj) {
+    // create weather card
+    const weatherCardContainerEl = document.createElement("div");
+    cls = ["weather-card-container", "p-0", "col-6", "col-md-4", "col-lg-3"];
+    weatherCardContainerEl.classList.add(...cls);
+
+    // create weather card
+    const weatherCardEl = document.createElement("div");
+    cls = ["weather-card", "card", "m-1"];
+    weatherCardEl.classList.add(...cls);
+
+    // create weather image
+    const weatherCardImgEl = document.createElement("img");
+    cls = ["weather-img", "card-img-top"];
+    weatherCardImgEl.classList.add(...cls);
+    weatherCardImgEl.setAttribute("src", "https://openweathermap.org/img/wn/" + weatherDataObj["icon"] + "@2x.png");
+    weatherCardImgEl.setAttribute("alt", "weather condition image");
+
+    // create weather body
+    const weatherCardBodyEl = document.createElement("div");
+    cls = ["weather-body", "card-body"];
+    weatherCardBodyEl.classList.add(...cls);
+
+    // create weather title 
+    const weatherCardTitleEl = document.createElement("h5");
+    cls = ["weather-title", "card-title"];
+    weatherCardTitleEl.classList.add(...cls);
+    if (date != null) {
+        weatherCardTitleEl.textContent = date;
+
+    } else {
+        weatherCardTitleEl.textContent = "Current Conditions";
+    }
+
+    // create weather text
+    const weatherCardTextEl = document.createElement("div");
+    cls = ["weather-text", "card-text"];
+    weatherCardTextEl.classList.add(...cls);
+
+    // loop over the weatherDataObj and add to weatherCartTextEl
+    for (const property in weatherDataObj) {
 
         // skip icon property
         if (property === "icon") {
@@ -110,13 +147,13 @@ function renderWeather(city, data) {
         }
 
         const propertyDiv = document.createElement("div");
-        propertyDiv.textContent = `${property}: ${currentWeatherObj[property]}`;
+        propertyDiv.textContent = `${property}: ${weatherDataObj[property]}`;
         propertyDiv.classList.add("px-2")
 
         // // update UVI background color
         if (property === "UV Index") {
             let cls = "";
-            const uvi = currentWeatherObj[property];
+            const uvi = weatherDataObj[property];
             if (uvi < 3) {
                 cls = "bg-success";
             } else if (uvi < 6) {
@@ -126,20 +163,14 @@ function renderWeather(city, data) {
             }
             propertyDiv.classList.add(cls, "rounded-2");
         }
-        currentWeatherCardTextEl.append(propertyDiv);
+        weatherCardTextEl.append(propertyDiv);
     }
 
-    // append all the things
-
-    // append current weather elements
-    currentWeatherCardBodyEl.append(currentWeatherCardTitleEl, currentWeatherCardTextEl);
-    currentWeatherCardEl.append(currentWeatherCardImgEl, currentWeatherCardBodyEl);
-
-    // append current weather to container body
-    containerBodyEl.append(currentWeatherCardEl);
-    containterCardEl.append(containerHeaderEl, containerBodyEl);
-    document.querySelector(".container").append(containterCardEl);
-
+    // append weather elements to card
+    weatherCardBodyEl.append(weatherCardTitleEl, weatherCardTextEl);
+    weatherCardEl.append(weatherCardImgEl, weatherCardBodyEl);
+    weatherCardContainerEl.append(weatherCardEl);
+    return weatherCardContainerEl;
 }
 
 init();
