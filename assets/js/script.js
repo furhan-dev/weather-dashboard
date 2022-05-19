@@ -68,7 +68,7 @@ function renderWeather(city, data) {
     // get current weather data and store in object
     const currentWeatherObj = {
         "Temp": Math.round(data.current.temp) + "°F",
-        "Wind Speed": Math.round(data.current.wind_speed) + " MPH",
+        "Wind": Math.round(data.current.wind_speed) + " MPH",
         "Humidity": Math.round(data.current.humidity) + "%",
         "UV Index": Math.round(data.current.uvi),
         "icon": data.current.weather[0].icon
@@ -82,7 +82,7 @@ function renderWeather(city, data) {
         const data = dailyDataArray[i];
         const weatherDataObj = {
             "Temp": data.temp.max + "°F",
-            "Wind Speed": Math.round(data.wind_speed) + " MPH",
+            "Wind": Math.round(data.wind_speed) + " MPH",
             "Humidity": Math.round(data.humidity) + "%",
             "UV Index": Math.round(data.uvi),
             "icon": data.weather[0].icon
@@ -102,12 +102,12 @@ function renderWeather(city, data) {
 function createDailyWeatherCard(date, weatherDataObj) {
     // create weather card
     const weatherCardContainerEl = document.createElement("div");
-    cls = ["weather-card-container", "p-0", "col-6", "col-md-4", "col-lg-3"];
+    cls = ["weather-card-container", "p-0", "col-6", "col-md-4", "col-lg-3", "col-xl-2"];
     weatherCardContainerEl.classList.add(...cls);
 
     // create weather card
     const weatherCardEl = document.createElement("div");
-    cls = ["weather-card", "card", "rounded-3", "shadow", "border-0", "m-1"];
+    cls = ["weather-card", "card", "shadow", "border-0", "m-1"];
     weatherCardEl.classList.add(...cls);
 
     // create weather image
@@ -119,7 +119,7 @@ function createDailyWeatherCard(date, weatherDataObj) {
 
     // create weather body
     const weatherCardBodyEl = document.createElement("div");
-    cls = ["weather-body", "card-body"];
+    cls = ["weather-body", "card-body", "pt-0"];
     weatherCardBodyEl.classList.add(...cls);
 
     // create weather title 
