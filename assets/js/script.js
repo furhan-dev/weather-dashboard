@@ -119,10 +119,10 @@ function renderWeather(city, data) {
     containerBodyEl.append(createDailyWeatherCard(null, currentWeatherObj));
 
     const dailyDataArray = data.daily;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 1; i < 6; i++) {
         const data = dailyDataArray[i];
         const weatherDataObj = {
-            "Temp": data.temp.max + "°F",
+            "High": Math.round(data.temp.max) + "°F",
             "Wind": Math.round(data.wind_speed) + " MPH",
             "Humidity": Math.round(data.humidity) + "%",
             "UV Index": Math.round(data.uvi),
@@ -130,7 +130,7 @@ function renderWeather(city, data) {
         }
 
         // append daily weather to container body
-        containerBodyEl.append(createDailyWeatherCard(moment.unix(data.dt).format("MM/DD/YYYY"), weatherDataObj));
+        containerBodyEl.append(createDailyWeatherCard(moment.unix(data.dt).format("MMM D, YYYY"), weatherDataObj));
 
     }
 
@@ -171,7 +171,7 @@ function createDailyWeatherCard(date, weatherDataObj) {
         weatherCardTitleEl.textContent = date;
 
     } else {
-        weatherCardTitleEl.textContent = "Current Conditions";
+        weatherCardTitleEl.textContent = "Right Now";
     }
 
     // create weather text
