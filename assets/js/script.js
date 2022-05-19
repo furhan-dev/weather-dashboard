@@ -17,6 +17,13 @@ function init() {
     });
 
     placeInputFormEl.addEventListener("submit", handleWeather);
+
+    // populate dashboard from local storage
+    let cities = localStorage.getItem("cities")
+    if (cities) {
+        cities = JSON.parse(cities);
+        cities.forEach(cityObj => getWeather(cityObj.city, cityObj.lon, cityObj.lat));
+    }
 }
 
 function handleWeather(event) {
