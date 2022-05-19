@@ -37,8 +37,37 @@ function handleWeather(event) {
             alert('Error: ' + response.statusText);
         }
     })
-    .then(data => getWeather(data[0].name, data[0].lon, data[0].lat))
+    .then(data => {
+        // add to local storage once we have geo code
+        const cityObj = {
+            city: data[0].name,
+            lon: data[0].lon,
+            lat: data[0].lat
+        };
+        addCityToLocalStorage(cityObj);
+        getWeather(data[0].name, data[0].lon, data[0].lat)
+    })
     .catch(error => alert('Unable to connect to Open Weather'));
+}
+
+function addCityToLocalStorage(cityObj) {
+    let cities = JSON.parse(localStorage.getItem("cities"));
+
+    if (!cities) {
+        cities = [];
+    }
+
+    // check if city already exists
+    cities.forEach(element => {
+        // skip adding to local storage if it already exists
+        if (element.city === cityObj.city) {
+            throw "City already exists in dashboard";
+        }
+    });
+
+    // add city to local storage
+    cities.push(cityObj);
+    localStorage.setItem("cities", JSON.stringify(cities));
 }
 
 function getWeather(city, lon, lat) {
@@ -52,7 +81,7 @@ function getWeather(city, lon, lat) {
         }
     })
     .then(data => renderWeather(city, data))
-    // .catch(error => alert('Unable to connect to Open Weather'));
+    .catch(error => alert('Unable to connect to Open Weather'));
 }
 
 function renderWeather(city, data) {
