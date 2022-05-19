@@ -22,7 +22,12 @@ function init() {
 function handleWeather(event) {
     event.preventDefault();
     const city = placeInputEl.value;
+
+    // clear input field and disable button 
     placeInputEl.value = "";
+    addToDashboardButtonEl.disabled = true;
+    addToDashboardButtonEl.classList.replace("btn-primary", "btn-disabled");
+
     const geoCodeUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${openWeatherKey}`;
     fetch(geoCodeUrl)
     .then(response => {
@@ -56,7 +61,7 @@ function renderWeather(city, data) {
     containterCardEl.classList.add(...cls);
 
     const containerHeaderEl = document.createElement("div");
-    cls = ["container-header", "card-header", "rounded-3", "shadow-sm", "h2"];
+    cls = ["container-header", "card-header", "bg-primary", "text-light", "rounded-3", "shadow-sm", "h2"];
     containerHeaderEl.classList.add(...cls);
     containerHeaderEl.textContent = city;
 
