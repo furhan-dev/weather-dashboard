@@ -114,7 +114,7 @@ function createDailyWeatherCard(date, weatherDataObj) {
     const weatherCardImgEl = document.createElement("img");
     cls = ["weather-img", "card-img-top"];
     weatherCardImgEl.classList.add(...cls);
-    weatherCardImgEl.setAttribute("src", "https://openweathermap.org/img/wn/" + weatherDataObj["icon"] + "@2x.png");
+    weatherCardImgEl.setAttribute("src", "https://openweathermap.org/img/wn/" + weatherDataObj["icon"] + "@4x.png");
     weatherCardImgEl.setAttribute("alt", "weather condition image");
 
     // create weather body
@@ -124,7 +124,7 @@ function createDailyWeatherCard(date, weatherDataObj) {
 
     // create weather title 
     const weatherCardTitleEl = document.createElement("h5");
-    cls = ["weather-title", "card-title"];
+    cls = ["weather-title", "card-title", "text-center"];
     weatherCardTitleEl.classList.add(...cls);
     if (date != null) {
         weatherCardTitleEl.textContent = date;
