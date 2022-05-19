@@ -52,11 +52,11 @@ function getWeather(city, lon, lat) {
 
 function renderWeather(city, data) {
     const containterCardEl = document.createElement("div");
-    let cls = ["container-card", "card", "border-light", "my-3"];
+    let cls = ["container-card", "card", "border-0", "my-3"];
     containterCardEl.classList.add(...cls);
 
     const containerHeaderEl = document.createElement("div");
-    cls = ["container-header", "card-header", "h2"];
+    cls = ["container-header", "card-header", "rounded-3", "h2"];
     containerHeaderEl.classList.add(...cls);
     containerHeaderEl.textContent = city;
 
