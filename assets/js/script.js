@@ -56,7 +56,7 @@ function renderWeather(city, data) {
     containterCardEl.classList.add(...cls);
 
     const containerHeaderEl = document.createElement("div");
-    cls = ["container-header", "card-header", "rounded-3", "h2"];
+    cls = ["container-header", "card-header", "rounded-3", "shadow-sm", "h2"];
     containerHeaderEl.classList.add(...cls);
     containerHeaderEl.textContent = city;
 
@@ -107,7 +107,7 @@ function createDailyWeatherCard(date, weatherDataObj) {
 
     // create weather card
     const weatherCardEl = document.createElement("div");
-    cls = ["weather-card", "card", "border-dark", "m-1"];
+    cls = ["weather-card", "card", "rounded-3", "shadow", "border-0", "m-1"];
     weatherCardEl.classList.add(...cls);
 
     // create weather image
