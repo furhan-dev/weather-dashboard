@@ -9,10 +9,8 @@ function init() {
     placeInputEl.addEventListener("input", () => {
         if (placeInputEl.value.length === 0) {
             addToDashboardButtonEl.disabled = true;
-            addToDashboardButtonEl.classList.replace("btn-primary", "btn-disabled");
         } else {
             addToDashboardButtonEl.disabled = false;
-            addToDashboardButtonEl.classList.replace("btn-disabled", "btn-primary");
         }
     });
 
